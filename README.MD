@@ -1,15 +1,16 @@
 # justlog [![Build Status](https://github.com/gempir/justlog/workflows/ci/badge.svg)](https://github.com/gempir/justlog/actions?query=workflow%3Aci)
 
-### What is this?
-Justlog is an twitch irc bot. It focuses on logging and providing an api for the logs.
+### ¿Qué es esto?
+
+Justlog es un bot IRC de Twitch. Se centra en el registro de mensajes y proporcionar una API para los registros.
 
 ### Optout
 
-Click the X icon on the web ui to find a explanation how to opt out.
+Haz clic en el icono de la **X** en la ui de la web para encontrar una explicación de cómo excluirse de los registros.
 
 ### API
 
-API documentation can be viewed via the justlog frontend by clicking the "docs" symbol:  
+La documentación de la API se puede ver a través del frontend de justlog haciendo clic en el símbolo "docs" aquí:  
 ![image](https://user-images.githubusercontent.com/1629196/159481078-0de98f01-2816-49bd-8e17-ba7cf66cb064.png)
 
 ### Docker
@@ -19,38 +20,38 @@ mkdir logs
 docker run -p 8025:8025 --restart=unless-stopped -v $PWD/config.json:/etc/justlog.json -v $PWD/logs:/logs ghcr.io/gempir/justlog
 ```
 
-### Commands
+### Comandos
 
-Only admins can use these commands
+Sólo los administradores pueden utilizar estos comandos
 
-- `!justlog status` will respond with uptime
-- `!justlog join gempir pajlada` will join the channels and append them to the config
-- `!justlog part gempir pajlada` will part the channels and remove them from the config
-- `!justlog optout gempir gempbot` will opt out users of message logging or querying previous logs of that user, same applies to users own channel
-- `!justlog optin gempir gempbot` will revert the opt out
+- `!justlog status` Responderá con el tiempo de actividad
+- `!justlog join gempir pajlada` Se unirá a los canales y los añadirá a la configuración
+- `!justlog part gempir pajlada` Se retirará de los canales y los eliminará de la configuración
+- `!justlog optout gempir gempbot` Excluirá a los usuarios del registro de mensajes o de la consulta de los registros anteriores de ese usuario, lo mismo se aplica al propio canal de los usuarios
+- `!justlog optin gempir gempbot` Revertirá la exclusión de los registros
 
-### Config
+### Configuración
 
 ```
 {
-    "admins": ["gempir"], // will only respond to commands executed by these users
-    "logsDirectory": "./logs", // the directory to log into
-    "adminAPIKey": "noshot", // your secret api key to access the admin api, can be any string, used in api request to admin endpoints
-    "username": "gempbot", // bot username (can be justinfan123123 if you don't want to use an account)
-    "oauth": "oauthtokenforchat", // bot token can be anything if justinfan123123
-    "botVerified": true, // increase ratelimits if you have a verified bot, so the bot can join faster, false by default
-    "clientID": "mytwitchclientid", // your client ID, needed for fetching userids or usernames etc
-    "clientSecret": "mysecret", // your twitch client secret
+    "admins": ["gempir"], // Sólo responderá a los comandos ejecutados por estos usuarios
+    "logsDirectory": "./logs", // El directorio en el que estarán los registros
+    "adminAPIKey": "noshot", // Su API Key secreta para acceder a la API de admin, puede ser cualquier cadena de texto, es utilizada en la solicitud API a los endpoints de admin
+    "username": "gempbot", // Usuario del bot (puede ser justinfan123123 si no quieres usar una cuenta)
+    "oauth": "oauthtokenforchat", // Token del bot, puede ser cualquier cosa si el usuario es justinfan123123
+    "botVerified": true, // Aumenta los ratelimits si tienes un bot verificado, el bot podrá unirse más rápido, falso por defecto
+    "clientID": "mytwitchclientid", // Su Client ID, necesario para obtener userids o nombres de usuario, etc
+    "clientSecret": "mysecret", // Su Client Secret de Twitch
     "logLevel": "info", // the log level, keep this to info probably, all options are: trace, debug, info, warn, error, fatal, and panic, logs output is stdout
     "channels": ["77829817", "11148817"], // the channels (userids) you want to log
     "archive": true // probably keep to true, will disable gzipping of old logs if false, useful if you setup compression on your own
 }
 ```
 
-### Development
+### Desarrollo
 
-Development requires [yarn](https://classic.yarnpkg.com/) and [go-swagger](https://goswagger.io/)
+El desarrollo requiere [yarn](https://classic.yarnpkg.com/) y [go-swagger](https://goswagger.io/)
 
-Run `go build && ./justlog` and `yarn start` in the web folder. 
+Ejecuta `go build && ./justlog` y `yarn start` en la carpeta web. 
 
-Or run `make container` and `make run_container`
+O ejecuta `make container` y `make run_container`
