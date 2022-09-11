@@ -29,7 +29,7 @@ type channelConfigsJoinRequest struct {
 
 // swagger:route POST /admin/channels admin addChannels
 //
-// Will add the channels to log, only works with userIds
+// Añadirá los canales al registro, sólo funciona con UserIDs
 //
 //     Consumes:
 //     - application/json
@@ -51,7 +51,7 @@ type channelConfigsJoinRequest struct {
 
 // swagger:route DELETE /admin/channels admin deleteChannels
 //
-// Will remove the channels to log, only works with userIds
+// Eliminará los canales de registro, sólo funciona con UserIDs
 //
 //     Consumes:
 //     - application/json

@@ -18,7 +18,7 @@ type RandomChannelQuoteJSON struct {
 
 // swagger:route GET /channel/{channel}/random logs randomChannelLog
 //
-// Get a random line from the entire channel log's history
+// Obtén una línea aleatoria del historial del registro del canal
 //
 //     Produces:
 //     - application/json
@@ -29,7 +29,7 @@ type RandomChannelQuoteJSON struct {
 
 // swagger:route GET /channelid/{channelid}/random logs randomChannelLog
 //
-// Get a random line from the entire channel log's history
+// Obtén una línea aleatoria del historial del registro del canal
 //
 //     Produces:
 //     - application/json
@@ -51,7 +51,7 @@ func (s *Server) getChannelRandomQuote(request logRequest) (*chatLog, error) {
 
 // swagger:route GET /channel/{channel} logs channelLogs
 //
-// Get entire channel logs of current day
+// Obtén todos los registros del canal del día actual
 //
 //     Produces:
 //     - application/json
@@ -62,7 +62,7 @@ func (s *Server) getChannelRandomQuote(request logRequest) (*chatLog, error) {
 
 // swagger:route GET /channel/{channel}/{year}/{month}/{day} logs channelLogsYearMonthDay
 //
-// Get entire channel logs of given day
+// Obtén los registros completos del canal de un día determinado
 //
 //     Produces:
 //     - application/json

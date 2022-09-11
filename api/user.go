@@ -19,7 +19,7 @@ type RandomQuoteJSON struct {
 
 // swagger:route GET /channel/{channel}/user/{username}/random logs channelUserLogsRandom
 //
-// Get a random line from a user in a given channel
+// Obtén una línea aleatoria de un usuario en un canal determinado
 //
 //     Produces:
 //     - application/json
@@ -30,7 +30,7 @@ type RandomQuoteJSON struct {
 
 // swagger:route GET /channelid/{channelid}/userid/{userid}/random logs channelIdUserIdLogsRandom
 //
-// Get a random line from a user in a given channel
+// Obtén una línea aleatoria de un usuario en un canal determinado
 //
 //     Produces:
 //     - application/json
@@ -41,7 +41,7 @@ type RandomQuoteJSON struct {
 
 // swagger:route GET /channelid/{channelid}/user/{user}/random logs channelIdUserLogsRandom
 //
-// Get a random line from a user in a given channel
+// Obtén una línea aleatoria de un usuario en un canal determinado
 //
 //     Produces:
 //     - application/json
@@ -52,7 +52,7 @@ type RandomQuoteJSON struct {
 
 // swagger:route GET /channel/{channel}/userid/{userid}/random logs channelUserIdLogsRandom
 //
-// Get a random line from a user in a given channel
+// Obtén una línea aleatoria de un usuario en un canal determinado
 //
 //     Produces:
 //     - application/json
@@ -74,7 +74,7 @@ func (s *Server) getRandomQuote(request logRequest) (*chatLog, error) {
 
 // swagger:route GET /list logs list
 //
-// Lists available logs of a user
+// Lista de los registros disponibles de un usuario
 //
 //     Produces:
 //     - application/json
@@ -96,7 +96,7 @@ func (s *Server) writeAvailableLogs(w http.ResponseWriter, r *http.Request, q ur
 
 // swagger:route GET /channel/{channel}/user/{username} logs channelUserLogs
 //
-// Get user logs in channel of current month
+// Obtén los registros del usuario en el canal del mes actual
 //
 //     Produces:
 //     - application/json
@@ -107,7 +107,7 @@ func (s *Server) writeAvailableLogs(w http.ResponseWriter, r *http.Request, q ur
 
 // swagger:route GET /channelid/{channelid}/userid/{userid} logs channelIdUserIdLogs
 //
-// Get user logs in channel of current month
+// Obtén los registros del usuario en el canal del mes actual
 //
 //     Produces:
 //     - application/json
@@ -118,7 +118,7 @@ func (s *Server) writeAvailableLogs(w http.ResponseWriter, r *http.Request, q ur
 
 // swagger:route GET /channelid/{channelid}/user/{username} logs channelIdUserLogs
 //
-// Get user logs in channel of current month
+// Obtén los registros del usuario en el canal del mes actual
 //
 //     Produces:
 //     - application/json
@@ -129,7 +129,7 @@ func (s *Server) writeAvailableLogs(w http.ResponseWriter, r *http.Request, q ur
 
 // swagger:route GET /channel/{channel}/userid/{userid} logs channelUserIdLogs
 //
-// Get user logs in channel of current month
+// Obtén los registros del usuario en el canal del mes actual
 //
 //     Produces:
 //     - application/json
@@ -140,7 +140,7 @@ func (s *Server) writeAvailableLogs(w http.ResponseWriter, r *http.Request, q ur
 
 // swagger:route GET /channel/{channel}/user/{username}/{year}/{month} logs channelUserLogsYearMonth
 //
-// Get user logs in channel of given year month
+// Obtén los registros del usuario en el canal del año y mes dados
 //
 //     Produces:
 //     - application/json
@@ -151,7 +151,7 @@ func (s *Server) writeAvailableLogs(w http.ResponseWriter, r *http.Request, q ur
 
 // swagger:route GET /channelid/{channelid}/userid/{userid}/{year}/{month} logs channelIdUserIdLogsYearMonth
 //
-// Get user logs in channel of given year month
+// Obtén los registros del usuario en el canal del año y mes dados
 //
 //     Produces:
 //     - application/json
@@ -162,7 +162,7 @@ func (s *Server) writeAvailableLogs(w http.ResponseWriter, r *http.Request, q ur
 
 // swagger:route GET /channelid/{channelid}/user/{username}/{year}/{month} logs channelIdUserLogsYearMonth
 //
-// Get user logs in channel of given year month
+// Obtén los registros del usuario en el canal del año y mes dados
 //
 //     Produces:
 //     - application/json
@@ -173,7 +173,7 @@ func (s *Server) writeAvailableLogs(w http.ResponseWriter, r *http.Request, q ur
 
 // swagger:route GET /channel/{channel}/userid/{userid}/{year}/{month} logs channelUserIdLogsYearMonth
 //
-// Get user logs in channel of given year month
+// Obtén los registros del usuario en el canal del año y mes dados
 //
 //     Produces:
 //     - application/json

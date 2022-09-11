@@ -131,11 +131,6 @@ func (s *Server) route(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if url == "/optout" && r.Method == http.MethodPost {
-		s.writeOptOutCode(w, r)
-		return
-	}
-
 	if strings.HasPrefix(url, "/admin/channels") {
 		success := s.authenticateAdmin(w, r)
 		if success {
@@ -278,7 +273,7 @@ func reverseSlice(input []string) []string {
 
 // swagger:route GET /channels justlog channels
 //
-// List currently logged channels
+// Lista de canales registrados actualmente
 //
 //     Produces:
 //     - application/json
