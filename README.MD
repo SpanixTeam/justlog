@@ -1,4 +1,4 @@
-# justlog [![Build Status](https://github.com/gempir/justlog/workflows/ci/badge.svg)](https://github.com/gempir/justlog/actions?query=workflow%3Aci)
+# justlog [![Build Status](https://github.com/SpanixTeam/justlog/workflows/ci/badge.svg)](https://github.com/SpanixTeam/justlog/actions?query=workflow%3Aci)
 
 ### ¿Qué es esto?
 
