@@ -7,7 +7,7 @@ Justlog es un bot IRC de Twitch. Se centra en el registro de mensajes y proporci
 ### API
 
 La documentación de la API se puede ver a través del frontend de justlog haciendo clic en el símbolo "docs" aquí:  
-![image](https://user-images.githubusercontent.com/1629196/159481078-0de98f01-2816-49bd-8e17-ba7cf66cb064.png)
+![image](https://i.imgur.com/En2LPFy.png)
 
 ### Docker
 
