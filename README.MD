@@ -4,10 +4,6 @@
 
 Justlog es un bot IRC de Twitch. Se centra en el registro de mensajes y proporcionar una API para los registros.
 
-### Optout
-
-Haz clic en el icono de la **X** en la ui de la web para encontrar una explicación de cómo excluirse de los registros.
-
 ### API
 
 La documentación de la API se puede ver a través del frontend de justlog haciendo clic en el símbolo "docs" aquí:  
@@ -40,11 +36,11 @@ Sólo los administradores pueden utilizar estos comandos
     "username": "gempbot", // Usuario del bot (puede ser justinfan123123 si no quieres usar una cuenta)
     "oauth": "oauthtokenforchat", // Token del bot, puede ser cualquier cosa si el usuario es justinfan123123
     "botVerified": true, // Aumenta los ratelimits si tienes un bot verificado, el bot podrá unirse más rápido, falso por defecto
-    "clientID": "mytwitchclientid", // Su Client ID, necesario para obtener userids o nombres de usuario, etc
+    "clientID": "mytwitchclientid", // Su Client ID, necesario para obtener UserIDs o nombres de usuario, etc
     "clientSecret": "mysecret", // Su Client Secret de Twitch
-    "logLevel": "info", // the log level, keep this to info probably, all options are: trace, debug, info, warn, error, fatal, and panic, logs output is stdout
-    "channels": ["77829817", "11148817"], // the channels (userids) you want to log
-    "archive": true // probably keep to true, will disable gzipping of old logs if false, useful if you setup compression on your own
+    "logLevel": "info", // El nivel de registro, deberías mantenerlo en info, las demás opciones son: trace, debug, info, warn, error, fatal, y panic, logs output es stdout
+    "channels": ["77829817", "11148817"], // Los canales (UserIDs) que desea registrar
+    "archive": true // Probablemente se mantenga en true, deshabilitará el gzipping de los registros antiguos si es false, útil si configura la compresión por su cuenta
 }
 ```
 

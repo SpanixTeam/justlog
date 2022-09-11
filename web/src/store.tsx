@@ -44,37 +44,35 @@ const defaultContext = {
         apiBaseUrl: process?.env.REACT_APP_API_BASE_URL ?? window.location.protocol + "//" + window.location.host,
         settings: {
             showEmotes: {
-                displayName: "Show Emotes",
+                displayName: "Mostrar Emotes",
                 value: true,
             },
             showName: {
-                displayName: "Show Name",
+                displayName: "Mostrar Nombre",
                 value: true,
             },
             showTimestamp: {
-                displayName: "Show Timestamp",
+                displayName: "Mostrar Marca de Tiempo",
                 value: true,
             },
             twitchChatMode: {
-                displayName: "Twitch Chat Mode",
+                displayName: "Modo Chat de Twitch",
                 value: false,
             },
             newOnBottom: {
-                displayName: "Newest messages on bottom",
+                displayName: "Mensajes recientes en la parte inferior",
                 value: false,
             },
         },
         currentChannel: url.searchParams.get("channel"),
         currentUsername: url.searchParams.get("username"),
         showSwagger: url.searchParams.has("swagger"),
-        showOptout: url.searchParams.has("optout"),
         error: false,
     } as State,
     setState: (state: State) => { },
     setCurrents: (currentChannel: string | null = null, currentUsername: string | null = null) => { },
     setSettings: (newSettings: Settings) => { },
     setShowSwagger: (show: boolean) => { },
-    setShowOptout: (show: boolean) => { },
 };
 
 const store = createContext(defaultContext);
@@ -90,29 +88,13 @@ const StateProvider = ({ children }: { children: JSX.Element }): JSX.Element => 
 
         if (show) {
             url.searchParams.set("swagger", "")
-            url.searchParams.delete("optout");
         } else {
             url.searchParams.delete("swagger");
         }
 
         window.history.replaceState({}, "justlog", url.toString());
 
-        setState({ ...state, showSwagger: show, showOptout: false })
-    }
-
-    const setShowOptout = (show: boolean) => {
-        const url = new URL(window.location.href);
-
-        if (show) {
-            url.searchParams.set("optout", "");
-            url.searchParams.delete("swagger");
-        } else {
-            url.searchParams.delete("optout");
-        }
-
-        window.history.replaceState({}, "justlog", url.toString());
-
-        setState({ ...state, showOptout: show, showSwagger: false })
+        setState({ ...state, showSwagger: show })
     }
 
     const setSettings = (newSettings: Settings) => {
@@ -145,7 +127,7 @@ const StateProvider = ({ children }: { children: JSX.Element }): JSX.Element => 
         window.history.replaceState({}, "justlog", url.toString());
     }
 
-    return <Provider value={{ state, setState, setSettings, setCurrents, setShowSwagger, setShowOptout }}>{children}</Provider>;
+    return <Provider value={{ state, setState, setSettings, setCurrents, setShowSwagger }}>{children}</Provider>;
 };
 
 export { store, StateProvider };

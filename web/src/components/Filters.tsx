@@ -6,7 +6,6 @@ import styled from "styled-components";
 import { useChannels } from "../hooks/useChannels";
 import { store } from "../store";
 import { Docs } from "./Docs";
-import { Optout } from "./Optout";
 import { Settings } from "./Settings";
 
 const FiltersContainer = styled.form`
@@ -61,13 +60,12 @@ export function Filters() {
                 defaultValue={state.currentChannel}
                 getOptionLabel={(channel: string) => channel}
                 clearOnBlur={false}
-                renderInput={(params) => <TextField {...params} name="channel" label="channel" variant="filled" autoFocus={state.currentChannel === null} />}
+                renderInput={(params) => <TextField {...params} name="channel" label="Canal" variant="filled" autoFocus={state.currentChannel === null} />}
             />
-            <TextField error={state.error} name="username" label="username" variant="filled" autoComplete="off" defaultValue={state.currentUsername} autoFocus={state.currentChannel !== null && state.currentUsername === null} />
-            <Button variant="contained" color="primary" size="large" type="submit">load</Button>
+            <TextField error={state.error} name="username" label="Usuario" variant="filled" autoComplete="off" defaultValue={state.currentUsername} autoFocus={state.currentChannel !== null && state.currentUsername === null} />
+            <Button variant="contained" color="primary" size="large" type="submit">Cargar</Button>
             <Settings />
             <Docs />
-            <Optout />
         </FiltersContainer>
     </FiltersWrapper>
 }
