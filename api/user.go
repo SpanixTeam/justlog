@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"time"
 
 	"github.com/gempir/go-twitch-irc/v3"
 )
@@ -54,12 +55,12 @@ type RandomQuoteJSON struct {
 //
 // Obtén una línea aleatoria de un usuario en un canal determinado
 //
-//     Produces:
-//     - application/json
-//     - text/plain
+//	Produces:
+//	- application/json
+//	- text/plain
 //
-//     Responses:
-//       200: chatLog
+//	Responses:
+//	  200: chatLog
 func (s *Server) getRandomQuote(request logRequest) (*chatLog, error) {
 	rawMessage, err := s.fileLogger.ReadRandomMessageForUser(request.channelid, request.userid)
 	if err != nil {
@@ -74,23 +75,39 @@ func (s *Server) getRandomQuote(request logRequest) (*chatLog, error) {
 
 // swagger:route GET /list logs list
 //
-// Lista de los registros disponibles de un usuario
+// Lista los registros disponibles de un usuario o canal, la respuesta del canal también incluye el día. OpenAPI 2 no admite ahora mismo múltiples respuestas con el mismo código http.
 //
-//     Produces:
-//     - application/json
-//     - text/plain
+//	Produces:
+//	- application/json
+//	- text/plain
 //
-//     Schemes: https
+//	Schemes: https
 //
-//     Responses:
-//       200: logList
+//	Responses:
+//	  200: logList
 func (s *Server) writeAvailableLogs(w http.ResponseWriter, r *http.Request, q url.Values) {
-	logs, err := s.fileLogger.GetAvailableLogsForUser(q.Get("channelid"), q.Get("userid"))
-	if err != nil {
-		http.Error(w, "failed to get available logs: "+err.Error(), http.StatusNotFound)
+	channelid := q.Get("channelid")
+	userid := q.Get("userid")
+
+	if userid == "" {
+		logs, err := s.fileLogger.GetAvailableLogsForChannel(channelid)
+		if err != nil {
+			http.Error(w, "failed to get available channel logs: "+err.Error(), http.StatusNotFound)
+			return
+		}
+
+		writeCacheControl(w, r, time.Hour)
+		writeJSON(&channelLogList{logs}, http.StatusOK, w, r)
 		return
 	}
 
+	logs, err := s.fileLogger.GetAvailableLogsForUser(channelid, userid)
+	if err != nil {
+		http.Error(w, "failed to get available user logs: "+err.Error(), http.StatusNotFound)
+		return
+	}
+
+	writeCacheControl(w, r, time.Hour)
 	writeJSON(&logList{logs}, http.StatusOK, w, r)
 }
 
@@ -175,12 +192,12 @@ func (s *Server) writeAvailableLogs(w http.ResponseWriter, r *http.Request, q ur
 //
 // Obtén los registros del usuario en el canal del año y mes dados
 //
-//     Produces:
-//     - application/json
-//     - text/plain
+//	Produces:
+//	- application/json
+//	- text/plain
 //
-//     Responses:
-//       200: chatLog
+//	Responses:
+//	  200: chatLog
 func (s *Server) getUserLogs(request logRequest) (*chatLog, error) {
 	logMessages, err := s.fileLogger.ReadLogForUser(request.channelid, request.userid, request.time.year, request.time.month)
 	if err != nil {

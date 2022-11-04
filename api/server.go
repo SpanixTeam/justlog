@@ -28,13 +28,13 @@ type Server struct {
 	logPath       string
 	bot           *bot.Bot
 	cfg           *config.Config
-	fileLogger    *filelog.Logger
+	fileLogger    filelog.Logger
 	helixClient   helix.TwitchApiClient
 	assetsHandler http.Handler
 }
 
 // NewServer create api Server
-func NewServer(cfg *config.Config, bot *bot.Bot, fileLogger *filelog.Logger, helixClient helix.TwitchApiClient, assets fs.FS) Server {
+func NewServer(cfg *config.Config, bot *bot.Bot, fileLogger filelog.Logger, helixClient helix.TwitchApiClient, assets fs.FS) Server {
 	build, err := fs.Sub(assets, "web/build")
 	if err != nil {
 		log.Fatal("failed to read public assets")
@@ -80,6 +80,11 @@ type chatLog struct {
 // swagger:model
 type logList struct {
 	AvailableLogs []filelog.UserLogFile `json:"availableLogs"`
+}
+
+// swagger:model
+type channelLogList struct {
+	AvailableLogs []filelog.ChannelLogFile `json:"availableLogs"`
 }
 
 type chatMessage struct {
@@ -224,6 +229,15 @@ func (s *Server) routeLogs(w http.ResponseWriter, r *http.Request) bool {
 	// Disable content type sniffing for log output
 	w.Header().Set("X-Content-Type-Options", "nosniff")
 
+	currentYear := fmt.Sprintf("%d", int(time.Now().Year()))
+	currentMonth := fmt.Sprintf("%d", int(time.Now().Month()))
+
+	if (request.time.year != "" && request.time.month != "") && (request.time.year < currentYear || (request.time.year == currentYear && request.time.month < currentMonth)) {
+		writeCacheControl(w, r, time.Hour*8760)
+	} else {
+		writeCacheControlNoCache(w, r)
+	}
+
 	if request.responseType == responseTypeJSON {
 		writeJSON(logs, http.StatusOK, w, r)
 		return true
@@ -275,14 +289,14 @@ func reverseSlice(input []string) []string {
 //
 // Lista de canales registrados actualmente
 //
-//     Produces:
-//     - application/json
-//     - text/plain
+//	Produces:
+//	- application/json
+//	- text/plain
 //
-//     Schemes: https
+//	Schemes: https
 //
-//     Responses:
-//       200: AllChannelsJSON
+//	Responses:
+//	  200: AllChannelsJSON
 func (s *Server) writeAllChannels(w http.ResponseWriter, r *http.Request) {
 	response := new(AllChannelsJSON)
 	response.Channels = []channel{}
@@ -311,6 +325,14 @@ func writeJSON(data interface{}, code int, w http.ResponseWriter, r *http.Reques
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(code)
 	w.Write(js)
+}
+
+func writeCacheControl(w http.ResponseWriter, r *http.Request, cacheDuration time.Duration) {
+	w.Header().Set("Cache-Control", fmt.Sprintf("public, max-age=%.0f", cacheDuration.Seconds()))
+}
+
+func writeCacheControlNoCache(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Cache-Control", "no-cache")
 }
 
 func writeRaw(cLog *chatLog, code int, w http.ResponseWriter, r *http.Request) {
