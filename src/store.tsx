@@ -31,7 +31,6 @@ export interface State {
     currentUsername: string | null,
     error: boolean,
     activeSearchField: HTMLInputElement | null,
-    showSwagger: boolean,
     showOptout: boolean,
 }
 
@@ -66,13 +65,11 @@ const defaultContext = {
         },
         currentChannel: url.searchParams.get("channel"),
         currentUsername: url.searchParams.get("username"),
-        showSwagger: url.searchParams.has("swagger"),
         error: false,
     } as State,
     setState: (state: State) => { },
     setCurrents: (currentChannel: string | null = null, currentUsername: string | null = null) => { },
     setSettings: (newSettings: Settings) => { },
-    setShowSwagger: (show: boolean) => { },
 };
 
 const store = createContext(defaultContext);
@@ -82,20 +79,6 @@ const StateProvider = ({ children }: { children: JSX.Element }): JSX.Element => 
 
     const [settings, setSettingsStorage] = useLocalStorage("justlog:settings", defaultContext.state.settings);
     const [state, setState] = useState({ ...defaultContext.state, settings });
-
-    const setShowSwagger = (show: boolean) => {
-        const url = new URL(window.location.href);
-
-        if (show) {
-            url.searchParams.set("swagger", "")
-        } else {
-            url.searchParams.delete("swagger");
-        }
-
-        window.history.replaceState({}, "justlog", url.toString());
-
-        setState({ ...state, showSwagger: show })
-    }
 
     const setSettings = (newSettings: Settings) => {
         for (const key of Object.keys(newSettings)) {
@@ -127,7 +110,7 @@ const StateProvider = ({ children }: { children: JSX.Element }): JSX.Element => 
         window.history.replaceState({}, "justlog", url.toString());
     }
 
-    return <Provider value={{ state, setState, setSettings, setCurrents, setShowSwagger }}>{children}</Provider>;
+    return <Provider value={{ state, setState, setSettings, setCurrents }}>{children}</Provider>;
 };
 
 export { store, StateProvider };
