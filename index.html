@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#090A0B" />
     <title>Spanixlogs</title>
+    <script defer src="https://umami.supa.codes/script.js" data-website-id="3a271b50-66b6-4145-9614-53be1fae9c29"></script>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
     <style>
@@ -44,5 +45,42 @@
     <div id="root"></div>
     <script type="module" src="/src/index.tsx"></script>
 </body>
+
+<script defer>
+    function getURLParameter(name) {
+        return new URLSearchParams(window.location.search).get(name) || '';
+    }
+
+    function trackUmami() {
+        const channel = getURLParameter('channel');
+        const user = getURLParameter('username');
+        if (window.umami) {
+            window.umami.track('load', {
+                channel,
+                user
+            });
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', (event) => {
+        trackUmami();
+    });
+
+    window.addEventListener('popstate', (event) => {
+        trackUmami();
+    });
+
+    history.pushState = ((f) => function pushState(){
+        const ret = f.apply(this, arguments);
+        window.dispatchEvent(new Event('popstate'));
+        return ret;
+    })(history.pushState);
+
+    history.replaceState = ((f) => function replaceState(){
+        const ret = f.apply(this, arguments);
+        window.dispatchEvent(new Event('popstate'));
+        return ret;
+    })(history.replaceState);
+</script>
 
 </html>
