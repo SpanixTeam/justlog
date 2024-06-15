@@ -66,6 +66,6 @@ const LoadableLogContainer = styled.div`
 
 function LoadableLog({ year, month, onLoad }: { year: string, month: string, onLoad: () => void }) {
     return <LoadableLogContainer>
-        <Button variant="contained" color="primary" size="large" onClick={onLoad}>load {year}/{month}</Button>
+        <Button variant="contained" color="error" size="large" onClick={onLoad}>load {year}/{month}</Button>
     </LoadableLogContainer>
 }

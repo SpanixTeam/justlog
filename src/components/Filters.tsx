@@ -79,7 +79,7 @@ export function Filters() {
                     defaultValue={state.currentUsername}
                     autoFocus={state.currentChannel !== null && state.currentUsername === null}
                 />
-                <Button variant="contained" color="primary" size="large" type="submit">cargar</Button>
+                <Button variant="contained" color="error" size="large" type="submit">cargar</Button>
                 <Settings />
                 <Docs />
             </FiltersContainer>
