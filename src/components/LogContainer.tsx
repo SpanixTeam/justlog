@@ -21,7 +21,7 @@ export function LogContainer() {
 
     useEffect(() => {
         const listener = function (e: KeyboardEvent) {
-            if (e.key === 'f' && e[ctrlKey] && !state.settings.twitchChatMode.value) {
+            if (e.key === 'f' && e[ctrlKey]) {
                 e.preventDefault();
                 if (state.activeSearchField) {
                     state.activeSearchField.focus();

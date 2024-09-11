@@ -28,41 +28,47 @@ const LogContainer = styled.div`
     }
 `;
 
-export function Log({ year, month, initialLoad = false }: { year: string, month: string, initialLoad?: boolean }) {
-    const { state } = useContext(store);
-    const [load, setLoad] = useState(initialLoad);
+export function Log({ year, month, initialLoad = false }: { year: string; month: string; initialLoad?: boolean }) {
+  const { state } = useContext(store)
+  const [load, setLoad] = useState(initialLoad)
+  const [txtHref, setTxtHref] = useState(state.apiBaseUrl)
 
-    if (!load) {
-        return <LogContainer>
-            <LoadableLog year={year} month={month} onLoad={() => setLoad(true)} />
-        </LogContainer>
-    }
-
-    let txtHref = `${state.apiBaseUrl}`
+  React.useEffect(() => {
+    let href = state.apiBaseUrl
     if (state.currentChannel && isUserId(state.currentChannel)) {
-        txtHref += `/channelid/${getUserId(state.currentChannel)}`
+      href += `/channelid/${getUserId(state.currentChannel)}`
     } else {
-        txtHref += `/channel/${state.currentChannel}`
+      href += `/channel/${state.currentChannel}`
     }
 
     if (state.currentUsername && isUserId(state.currentUsername)) {
-        txtHref += `/userid/${getUserId(state.currentUsername)}`
+      href += `/userid/${getUserId(state.currentUsername)}`
     } else {
-        txtHref += `/user/${state.currentUsername}`
+      href += `/user/${state.currentUsername}`
     }
 
-    txtHref += `/${year}/${month}?reverse`;
+    href += `/${year}/${month}?reverse`
+    setTxtHref(href)
+  }, [state.currentChannel, state.currentUsername, year, month, load])
+  if (!load) {
+    return (
+      <LogContainer>
+        <LoadableLog year={year} month={month} onLoad={() => setLoad(true)} />
+      </LogContainer>
+    )
+  }
 
-    return <LogContainer>
-        <a className="txt" target="__blank" href={txtHref} rel="noopener noreferrer"><Txt /></a>
-        {!state.settings.twitchChatMode.value && <ContentLog year={year} month={month} />}
-        {state.settings.twitchChatMode.value && <TwitchChatContentLog year={year} month={month} />}
+  return (
+    <LogContainer>
+      <a className="txt" target="__blank" href={txtHref} rel="noopener noreferrer">
+        <Txt />
+      </a>
+      <ContentLog year={year} month={month} />
     </LogContainer>
+  )
 }
 
-const LoadableLogContainer = styled.div`
-
-`;
+const LoadableLogContainer = styled.div``
 
 function LoadableLog({ year, month, onLoad }: { year: string, month: string, onLoad: () => void }) {
     return <LoadableLogContainer>
