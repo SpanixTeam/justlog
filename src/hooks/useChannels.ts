@@ -3,26 +3,31 @@ import { useQuery } from "react-query";
 import { store } from "../store";
 
 export interface Channel {
-    userID: string,
-    name: string
+  userID: string;
+  name: string;
 }
 
 export function useChannels(): Array<Channel> {
-    const { state } = useContext(store);
+  const { state } = useContext(store);
 
-    const { data } = useQuery<Array<Channel>>(`channels`, () => {
+  const { data } = useQuery<Array<Channel>>(
+    `channels`,
+    () => {
+      const queryUrl = new URL(`${state.apiBaseUrl}/channels`);
 
-        const queryUrl = new URL(`${state.apiBaseUrl}/channels`);
+      return fetch(queryUrl.toString())
+        .then((response) => {
+          if (response.ok) {
+            return response;
+          }
 
-        return fetch(queryUrl.toString()).then((response) => {
-            if (response.ok) {
-                return response;
-            }
+          throw Error(response.statusText);
+        })
+        .then((response) => response.json())
+        .then((data: { channels: Array<Channel> }) => data.channels);
+    },
+    { refetchOnWindowFocus: false, refetchOnReconnect: false },
+  );
 
-            throw Error(response.statusText);
-        }).then(response => response.json())
-            .then((data: { channels: Array<Channel> }) => data.channels);
-    }, { refetchOnWindowFocus: false, refetchOnReconnect: false });
-
-    return data ?? [];
+  return data ?? [];
 }

@@ -1,1 +1,1 @@
-export class OptOutError extends Error { }
+export class OptOutError extends Error {}

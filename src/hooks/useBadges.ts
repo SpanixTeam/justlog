@@ -1,42 +1,44 @@
-'https://api.ivr.fi/v2/twitch/badges/global'
-'https://api.ivr.fi/v2/twitch/badges/channel?id=${channel}'
+"https://api.ivr.fi/v2/twitch/badges/global";
+"https://api.ivr.fi/v2/twitch/badges/channel?id=${channel}";
 
-import { useQuery } from 'react-query'
-import { ChannelBadge, IvrTwitchBadgeResponse } from '../types/Badge'
-import { QueryDefaults } from '../store'
-import { useFfzChannelBadges } from './useFfzChannelBadges'
+import { useQuery } from "react-query";
+import { ChannelBadge, IvrTwitchBadgeResponse } from "../types/Badge";
+import { QueryDefaults } from "../store";
+import { useFfzChannelBadges } from "./useFfzChannelBadges";
 
 export function useBadges(channelId: string): Map<string, ChannelBadge> {
   const { isLoading, error, data } = useQuery<IvrTwitchBadgeResponse>(
-    ['badges:channel', { channelId: channelId }],
+    ["badges:channel", { channelId: channelId }],
     async () => {
-      if (channelId === '') {
-        return Promise.resolve([])
+      if (channelId === "") {
+        return Promise.resolve([]);
       }
 
       return [
         ...(await fetch(`https://api.ivr.fi/v2/twitch/badges/global`)
           .then((res) => res.json())
           .then((res) => res || null)),
-        ...(await fetch(`https://api.ivr.fi/v2/twitch/badges/channel?id=${channelId}`)
+        ...(await fetch(
+          `https://api.ivr.fi/v2/twitch/badges/channel?id=${channelId}`,
+        )
           .then((res) => res.json())
           .then((res) => res || null)),
-      ]
+      ];
     },
-    QueryDefaults
-  )
-  const { isLoading: ffzLoading, mod, vip } = useFfzChannelBadges(channelId)
+    QueryDefaults,
+  );
+  const { isLoading: ffzLoading, mod, vip } = useFfzChannelBadges(channelId);
 
   if (isLoading || ffzLoading) {
-    return new Map()
+    return new Map();
   }
 
   if (error) {
-    console.error(error)
-    return new Map()
+    console.error(error);
+    return new Map();
   }
 
-  const badges: Map<string, ChannelBadge> = new Map()
+  const badges: Map<string, ChannelBadge> = new Map();
 
   if (data) {
     data.forEach((badge) => {
@@ -50,16 +52,16 @@ export function useBadges(channelId: string): Map<string, ChannelBadge> {
             small: version.image_url_1x,
           },
           action: version.click_url,
-        })
-      })
-    })
+        });
+      });
+    });
   }
   if (mod) {
-    badges.set(mod.code, mod)
+    badges.set(mod.code, mod);
   }
   if (vip) {
-    badges.set(vip.code, vip)
+    badges.set(vip.code, vip);
   }
 
-  return badges
+  return badges;
 }

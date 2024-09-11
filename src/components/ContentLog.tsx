@@ -1,12 +1,22 @@
-import { InputAdornment, TextField } from '@mui/material'
-import { Search } from '@mui/icons-material'
-import React, { useContext, useState, CSSProperties, useRef, useEffect } from 'react'
-import styled from 'styled-components'
-import { useLog } from '../hooks/useLog'
-import { store } from '../store'
-import { LogLine } from './LogLine'
-import { areEqual, FixedSizeList as List, ListChildComponentProps } from 'react-window'
-import { LogMessage } from '../types/log'
+import { InputAdornment, TextField } from "@mui/material";
+import { Search } from "@mui/icons-material";
+import React, {
+  useContext,
+  useState,
+  CSSProperties,
+  useRef,
+  useEffect,
+} from "react";
+import styled from "styled-components";
+import { useLog } from "../hooks/useLog";
+import { store } from "../store";
+import { LogLine } from "./LogLine";
+import {
+  areEqual,
+  FixedSizeList as List,
+  ListChildComponentProps,
+} from "react-window";
+import { LogMessage } from "../types/log";
 
 const ContentLogContainer = styled.ul`
   padding: 0;
@@ -27,7 +37,7 @@ const ContentLogContainer = styled.ul`
   .list {
     scrollbar-color: dark;
   }
-`
+`;
 
 const Row = React.memo(
   ({ index, style, data: logs }: ListChildComponentProps<LogMessage[]>) => (
@@ -35,26 +45,31 @@ const Row = React.memo(
       <LogLine message={logs[index]} />
     </div>
   ),
-  areEqual
-)
+  areEqual,
+);
 
 export function ContentLog({ year, month }: { year: string; month: string }) {
-  const { state, setState } = useContext(store)
-  const [searchText, setSearchText] = useState('')
+  const { state, setState } = useContext(store);
+  const [searchText, setSearchText] = useState("");
 
-  const logs = useLog(state.currentChannel ?? '', state.currentUsername ?? '', year, month).filter((log) => log.text.toLowerCase().includes(searchText.toLowerCase()))
+  const logs = useLog(
+    state.currentChannel ?? "",
+    state.currentUsername ?? "",
+    year,
+    month,
+  ).filter((log) => log.text.toLowerCase().includes(searchText.toLowerCase()));
 
-  const search = useRef<HTMLInputElement>(null)
+  const search = useRef<HTMLInputElement>(null);
 
   const handleMouseEnter = () => {
-    if (state.activeSearchField === search.current) return
-    setState({ ...state, activeSearchField: search.current })
-  }
+    if (state.activeSearchField === search.current) return;
+    setState({ ...state, activeSearchField: search.current });
+  };
 
   useEffect(() => {
-    setState({ ...state, activeSearchField: search.current })
+    setState({ ...state, activeSearchField: search.current });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, []);
 
   return (
     <ContentLogContainer onMouseEnter={handleMouseEnter}>
@@ -73,10 +88,17 @@ export function ContentLog({ year, month }: { year: string; month: string }) {
         }}
       />
       {/*@ts-ignore*/}
-      <List className="list" height={600} itemCount={logs.length} itemSize={20} width={'100%'} itemData={logs}>
+      <List
+        className="list"
+        height={600}
+        itemCount={logs.length}
+        itemSize={20}
+        width={"100%"}
+        itemData={logs}
+      >
         {/*@ts-ignore*/}
         {Row}
       </List>
     </ContentLogContainer>
-  )
+  );
 }

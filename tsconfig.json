@@ -1,11 +1,7 @@
 {
   "compilerOptions": {
     "target": "ESNext",
-    "lib": [
-      "DOM",
-      "DOM.Iterable",
-      "ESNext"
-    ],
+    "lib": ["DOM", "DOM.Iterable", "ESNext"],
     "allowJs": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
@@ -18,14 +14,8 @@
     "isolatedModules": true,
     "useDefineForClassFields": true,
     "noEmit": true,
-    "types": [
-      "vite/client",
-      "react",
-      "react-dom"
-    ],
+    "types": ["vite/client", "react", "react-dom"],
     "jsx": "react-jsx"
   },
-  "include": [
-    "src"
-  ]
+  "include": ["src"]
 }
