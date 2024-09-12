@@ -8,6 +8,14 @@ import { store } from "../store";
 import { Docs } from "./Docs";
 import { Settings } from "./Settings";
 
+declare global {
+  interface Window {
+    umami: {
+      track: (event: string, data?: Record<string, any>) => void;
+    };
+  }
+}
+
 const FiltersContainer = styled.form`
   display: inline-flex;
   align-items: center;
