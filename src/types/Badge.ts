@@ -1,16 +1,16 @@
 export interface ChannelBadge {
 	code: string;
-
+	color?: string;
 	urls: BadgeUrls;
 	title: string;
 	action: string | null;
 }
 
 export interface UserBadge {
-	code: string;
-
+	code?: string;
 	urls: BadgeUrls;
 	title: string;
+	color?: string;
 	action: string | null;
 	users: string[];
 }

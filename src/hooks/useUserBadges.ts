@@ -1,11 +1,10 @@
-'https://api.ivr.fi/v2/twitch/badges/global';
-'https://api.ivr.fi/v2/twitch/badges/channel?id=${channel}';
-
 import { useQuery } from 'react-query';
 import { ChannelBadge, IvrTwitchBadgeResponse, UserBadge } from '../types/Badge';
 import { QueryDefaults } from '../store';
 import { useFfzChannelBadges } from './useFfzChannelBadges';
+import { ChatterinoGlobalBadgesResponse } from '../types/Chatterino';
 import { PaintCosmetic, StvCosmeticsResponse } from '../types/7tv';
+import { FfzGlobalBadgesResponse } from '../types/Ffz';
 import axios from 'axios';
 
 export function useUserBadges(userId: string): {
@@ -81,14 +80,67 @@ export function useUserBadges(userId: string): {
 								medium: `https://cdn.7tv.app/badge/${badge.id}/2x`,
 								small: `https://cdn.7tv.app/badge/${badge.id}/1x`,
 							},
-							action: 'https://7tv.app/store',
+							action: 'https://7tv.app',
 						};
 					});
 					return cosmetics;
+				})
+				.catch((error) => {
+					console.error('Error fetching 7TV badges:', error);
+					return {
+						badges: [],
+						paints: [],
+					};
+				});
+
+			const FfzBadges = await axios
+				.get<FfzGlobalBadgesResponse>('https://api.frankerfacez.com/v1/badges/ids')
+				.then((res) => {
+					return res.data.badges.map((badge) => {
+						return {
+							code: String(badge.id),
+							title: badge.title,
+							users: res.data.users[badge.id].map(String),
+							color: badge.color,
+							urls: {
+								big: badge.urls['4'],
+								medium: badge.urls['2'],
+								small: badge.urls['1'],
+							},
+							action: 'https://frankerfacez.com',
+						};
+					});
+				})
+				.catch((error) => {
+					console.error('Error fetching FrankerFaceZ badges:', error);
+					return [];
+				});
+
+			const ChatterinoBadges = await axios
+				.get<ChatterinoGlobalBadgesResponse>(
+					'https://api.spanix.team/proxy/https://api.chatterino.com/badges',
+				)
+				.then((res) => {
+					return res.data.badges.map((badge) => {
+						return {
+							title: badge.tooltip,
+							users: badge.users,
+							urls: {
+								big: badge.image3,
+								medium: badge.image2,
+								small: badge.image1,
+							},
+							action: 'https://chatterino.com',
+						};
+					});
+				})
+				.catch((error) => {
+					console.error('Error fetching Chatterino badges:', error);
+					return [];
 				});
 
 			return {
-				badges: sevenTvBadges.badges,
+				badges: [...ChatterinoBadges, ...FfzBadges, ...sevenTvBadges.badges],
 				paints: sevenTvBadges.paints,
 			};
 		},
@@ -171,7 +223,9 @@ export function useUserBadges(userId: string): {
 	if (data) {
 		userData.forEach((cosmetic) => {
 			if (cosmetic.kind === 'BADGE') {
-				badges.badges = data.badges.filter((badge) => cosmetic.id === badge.code);
+				badges.badges = data.badges.filter(
+					(badge) => cosmetic.id === badge.code || badge.users.includes(userId),
+				);
 			} else {
 				badges.paint = data.paints.find((paint) => cosmetic.id === paint.id) || null;
 			}

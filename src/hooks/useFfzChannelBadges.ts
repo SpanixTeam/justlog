@@ -54,6 +54,7 @@ export function useFfzChannelBadges(channelId: string): {
 		badges.mod = {
 			code: 'moderator/1',
 			title: 'Moderator',
+			color: '#00ad03',
 			urls: {
 				big: data.room.mod_urls[
 					Object.keys(data.room.mod_urls)

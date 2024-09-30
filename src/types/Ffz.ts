@@ -8,8 +8,10 @@ export interface FfzGlobalEmotesResponse {
 	sets: Sets;
 }
 export interface FfzGlobalBadgesResponse {
-	badges: Sets;
+	badges: Badge[];
+	users: { [key: string]: number[] };
 }
+
 //${customapi.https://<BASE_URL>/bot?input=${queryescape ${0:}}&user=${queryescape ${user}}&secret=<SECRET>}
 
 export interface Room {
@@ -74,4 +76,16 @@ export interface Owner {
 	_id: number;
 	display_name: string;
 	name: string;
+}
+
+export interface Badge {
+	id: number;
+	name: string;
+	title: string;
+	slot: number;
+	replaces: null | string;
+	color: string;
+	image: string;
+	urls: { [key: string]: string };
+	css: null;
 }

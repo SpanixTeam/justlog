@@ -32,6 +32,8 @@ const UserBadge = styled.img`
 	height: 1rem;
 	display: inline;
 	margin-right: 2px;
+	border-radius: 0.15em;
+	height: 1.1rem;
 `;
 
 export function User({
@@ -61,8 +63,6 @@ export function User({
 			{badges.map((badgeId, i) => {
 				const badge = channelBadges.get(badgeId);
 				if (badge) {
-					var ffz = false;
-					if (badge.urls.small.includes('franker')) ffz = true;
 					const url = badge.urls.small ?? null;
 					if (!url) return null;
 					return (
@@ -79,10 +79,7 @@ export function User({
 										style={{
 											height: 72,
 											width: 72,
-											background:
-												badge.code === 'moderator/1' && ffz
-													? '#00ad03'
-													: 'transparent',
+											background: badge.color ?? 'transparent',
 											borderRadius: '0.5em',
 										}}
 									/>
@@ -91,15 +88,18 @@ export function User({
 							}>
 							{badge.action ? (
 								<a href={badge.action} target={badge.code}>
-									<UserBadge src={url} style={{ height: '1.1rem', borderRadius: '0.15em' }} />{' '}
+									<UserBadge
+										src={url}
+										style={{
+											backgroundColor: badge.color ?? 'transparent',
+										}}
+									/>{' '}
 								</a>
 							) : (
 								<UserBadge
 									src={url}
 									style={{
-										height: '1.1rem',
-										backgroundColor: ffz ? '#00ad03' : 'transparent',
-										borderRadius: '0.15em',
+										backgroundColor: badge.color ?? 'transparent',
 									}}
 								/>
 							)}
@@ -109,9 +109,6 @@ export function User({
 				return null;
 			})}
 			{userBadges.badges.map((badge, i) => {
-				// var ffz = false
-				// if (badge.urls.small.includes('franker')) ffz = true
-
 				const url = badge.urls.small ?? null;
 				if (!url) return null;
 				return (
@@ -119,16 +116,30 @@ export function User({
 						key={`badge-${parsed.date.toISOString()}-${i}`}
 						title={
 							<Stack display="flex" alignItems="center" textAlign="center" gap="5px">
-								<img src={badge.urls.big} style={{ height: 72, width: 72 }} />
+								<img
+									src={badge.urls.big}
+									style={{
+										height: 72,
+										width: 72,
+										background: badge.color ?? 'transparent',
+										borderRadius: '0.5em',
+									}}
+								/>
 								<span>{badge.title}</span>
 							</Stack>
 						}>
 						{badge.action ? (
 							<a href={badge.action} target={badge.code}>
-								<UserBadge src={url} style={{ height: '1.1rem' }} />{' '}
+								<UserBadge
+									src={url}
+									style={{ background: badge.color ?? 'transparent' }}
+								/>{' '}
 							</a>
 						) : (
-							<UserBadge src={url} style={{ height: '1.1rem' }} />
+							<UserBadge
+								src={url}
+								style={{ background: badge.color ?? 'transparent' }}
+							/>
 						)}
 					</CustomTooltip>
 				);
