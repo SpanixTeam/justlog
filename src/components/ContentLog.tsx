@@ -1,104 +1,93 @@
-import { InputAdornment, TextField } from "@mui/material";
-import { Search } from "@mui/icons-material";
-import React, {
-  useContext,
-  useState,
-  CSSProperties,
-  useRef,
-  useEffect,
-} from "react";
-import styled from "styled-components";
-import { useLog } from "../hooks/useLog";
-import { store } from "../store";
-import { LogLine } from "./LogLine";
-import {
-  areEqual,
-  FixedSizeList as List,
-  ListChildComponentProps,
-} from "react-window";
-import { LogMessage } from "../types/log";
+import { InputAdornment, TextField } from '@mui/material';
+import { Search } from '@mui/icons-material';
+import React, { useContext, useState, CSSProperties, useRef, useEffect } from 'react';
+import styled from 'styled-components';
+import { useLog } from '../hooks/useLog';
+import { store } from '../store';
+import { LogLine } from './LogLine';
+import { areEqual, FixedSizeList as List, ListChildComponentProps } from 'react-window';
+import { LogMessage } from '../types/log';
 
 const ContentLogContainer = styled.ul`
-  padding: 0;
-  margin: 0;
-  position: relative;
+	padding: 0;
+	margin: 0;
+	position: relative;
 
-  .search {
-    position: absolute;
-    top: -52px;
-    width: 320px;
-    left: 0;
-  }
+	.search {
+		position: absolute;
+		top: -52px;
+		width: 320px;
+		left: 0;
+	}
 
-  .logLine {
-    white-space: nowrap;
-  }
+	.logLine {
+		white-space: nowrap;
+	}
 
-  .list {
-    scrollbar-color: dark;
-  }
+	.list {
+		scrollbar-color: dark;
+	}
 `;
 
 const Row = React.memo(
-  ({ index, style, data: logs }: ListChildComponentProps<LogMessage[]>) => (
-    <div key={logs[index].id ? logs[index].id : index} style={style}>
-      <LogLine message={logs[index]} />
-    </div>
-  ),
-  areEqual,
+	({ index, style, data: logs }: ListChildComponentProps<LogMessage[]>) => (
+		<div key={logs[index].id ? logs[index].id : index} style={style}>
+			<LogLine message={logs[index]} />
+		</div>
+	),
+	areEqual,
 );
 
 export function ContentLog({ year, month }: { year: string; month: string }) {
-  const { state, setState } = useContext(store);
-  const [searchText, setSearchText] = useState("");
+	const { state, setState } = useContext(store);
+	const [searchText, setSearchText] = useState('');
 
-  const logs = useLog(
-    state.currentChannel ?? "",
-    state.currentUsername ?? "",
-    year,
-    month,
-  ).filter((log) => log.text.toLowerCase().includes(searchText.toLowerCase()));
+	const logs = useLog(
+		state.currentChannel ?? '',
+		state.currentUsername ?? '',
+		year,
+		month,
+	).filter((log) => log.text.toLowerCase().includes(searchText.toLowerCase()));
 
-  const search = useRef<HTMLInputElement>(null);
+	const search = useRef<HTMLInputElement>(null);
 
-  const handleMouseEnter = () => {
-    if (state.activeSearchField === search.current) return;
-    setState({ ...state, activeSearchField: search.current });
-  };
+	const handleMouseEnter = () => {
+		if (state.activeSearchField === search.current) return;
+		setState({ ...state, activeSearchField: search.current });
+	};
 
-  useEffect(() => {
-    setState({ ...state, activeSearchField: search.current });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+	useEffect(() => {
+		setState({ ...state, activeSearchField: search.current });
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
 
-  return (
-    <ContentLogContainer onMouseEnter={handleMouseEnter}>
-      <TextField
-        className="search"
-        label="Search"
-        inputRef={search}
-        onChange={(e) => setSearchText(e.target.value)}
-        size="small"
-        InputProps={{
-          startAdornment: (
-            <InputAdornment position="start">
-              <Search />
-            </InputAdornment>
-          ),
-        }}
-      />
-      {/*@ts-ignore*/}
-      <List
-        className="list"
-        height={600}
-        itemCount={logs.length}
-        itemSize={20}
-        width={"100%"}
-        itemData={logs}
-      >
-        {/*@ts-ignore*/}
-        {Row}
-      </List>
-    </ContentLogContainer>
-  );
+	return (
+		<ContentLogContainer onMouseEnter={handleMouseEnter}>
+			<TextField
+				className="search"
+				label="Search"
+				inputRef={search}
+				onChange={(e) => setSearchText(e.target.value)}
+				size="small"
+				InputProps={{
+					startAdornment: (
+						<InputAdornment position="start">
+							<Search />
+						</InputAdornment>
+					),
+				}}
+			/>
+			{/*@ts-ignore*/}
+			<List
+				className="list"
+				height={600}
+				itemCount={logs.length}
+				itemSize={20}
+				width={'100%'}
+				itemData={logs}>
+				{/*@ts-ignore*/}
+				{Row}
+			</List>
+		</ContentLogContainer>
+	);
 }

@@ -1,99 +1,91 @@
 <!doctype html>
 <html lang="es">
-  <head>
-    <meta charset="utf-8" />
-    <link rel="icon" href="/favicon.ico" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#090A0B" />
-    <title>Spanixlogs</title>
-    <script
-      defer
-      src="https://umami.supa.codes/script.js"
-      data-website-id="3a271b50-66b6-4145-9614-53be1fae9c29"
-    ></script>
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
-    />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/icon?family=Material+Icons"
-    />
-    <style>
-      :root {
-        --bg: #0e0e10;
-        --bg-bright: #18181b;
-        --bg-brighter: #3d4146;
-        --bg-dark: #121416;
-        --theme: #00cc66;
-        --theme-bright: #00ff80;
-        --theme2: #2980b9;
-        --theme2-bright: #3498db;
-        --text: #f5f5f5;
-        --text-dark: #616161;
-        --danger: #e74c3c;
-      }
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" href="/favicon.ico" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="theme-color" content="#090A0B" />
+		<title>Spanixlogs</title>
+		<script
+			defer
+			src="https://umami.supa.codes/script.js"
+			data-website-id="3a271b50-66b6-4145-9614-53be1fae9c29"></script>
+		<link
+			rel="stylesheet"
+			href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
+		<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+		<style>
+			:root {
+				--bg: #0e0e10;
+				--bg-bright: #18181b;
+				--bg-brighter: #3d4146;
+				--bg-dark: #121416;
+				--theme: #00cc66;
+				--theme-bright: #00ff80;
+				--theme2: #2980b9;
+				--theme2-bright: #3498db;
+				--text: #f5f5f5;
+				--text-dark: #616161;
+				--danger: #e74c3c;
+			}
 
-      body {
-        margin: 0;
-        padding: 0;
-        background: var(--bg);
-        font-family: Helvetica, Arial, sans-serif;
-        height: 100%;
-        width: 100%;
-      }
+			body {
+				margin: 0;
+				padding: 0;
+				background: var(--bg);
+				font-family: Helvetica, Arial, sans-serif;
+				height: 100%;
+				width: 100%;
+			}
 
-      * {
-        box-sizing: border-box;
-      }
-    </style>
-  </head>
+			* {
+				box-sizing: border-box;
+			}
+		</style>
+	</head>
 
-  <body>
-    <noscript
-      >Es necesario habilitar JavaScript para ejecutar esta
-      aplicación.</noscript
-    >
-    <div id="root"></div>
-    <script type="module" src="/src/index.tsx"></script>
-  </body>
+	<body>
+		<noscript>Es necesario habilitar JavaScript para ejecutar esta aplicación.</noscript>
+		<div id="root"></div>
+		<script type="module" src="/src/index.tsx"></script>
+	</body>
 
-  <script defer>
-    function getURLParameter(name) {
-      return new URLSearchParams(window.location.search).get(name) || "";
-    }
+	<script defer>
+		function getURLParameter(name) {
+			return new URLSearchParams(window.location.search).get(name) || '';
+		}
 
-    function trackUmami() {
-      const channel = getURLParameter("channel");
-      const user = getURLParameter("username");
-      if (window.umami) {
-        window.umami.track("load", {
-          channel,
-          user,
-        });
-      }
-    }
+		function trackUmami() {
+			const channel = getURLParameter('channel');
+			const user = getURLParameter('username');
+			if (window.umami) {
+				window.umami.track('load', {
+					channel,
+					user,
+				});
+			}
+		}
 
-    document.addEventListener("DOMContentLoaded", (event) => {
-      trackUmami();
-    });
+		document.addEventListener('DOMContentLoaded', (event) => {
+			trackUmami();
+		});
 
-    window.addEventListener("popstate", (event) => {
-      trackUmami();
-    });
+		window.addEventListener('popstate', (event) => {
+			trackUmami();
+		});
 
-    history.pushState = ((f) =>
-      function pushState() {
-        const ret = f.apply(this, arguments);
-        window.dispatchEvent(new Event("popstate"));
-        return ret;
-      })(history.pushState);
+		history.pushState = ((f) =>
+			function pushState() {
+				const ret = f.apply(this, arguments);
+				window.dispatchEvent(new Event('popstate'));
+				return ret;
+			})(history.pushState);
 
-    history.replaceState = ((f) =>
-      function replaceState() {
-        const ret = f.apply(this, arguments);
-        window.dispatchEvent(new Event("popstate"));
-        return ret;
-      })(history.replaceState);
-  </script>
+		history.replaceState = ((f) =>
+			function replaceState() {
+				const ret = f.apply(this, arguments);
+				window.dispatchEvent(new Event('popstate'));
+				return ret;
+			})(history.replaceState);
+	</script>
 </html>
