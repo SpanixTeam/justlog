@@ -1,12 +1,13 @@
-import React, { useContext, useState } from "react";
-import Linkify from "linkify-react";
-import styled from "styled-components";
-import { store } from "../store";
-import type { Emote as IEmote, LogMessage } from "../types/log";
-import { ThirdPartyEmote } from "../types/ThirdPartyEmote";
-import runes from "runes";
-import { Link, Tooltip } from "@mui/material";
-import { LinkPreview } from "./LinkPreview";
+import React, { useContext, useState } from 'react'
+import Linkify from 'linkify-react'
+import styled from 'styled-components'
+import { store } from '../store'
+import type { Emote as IEmote, LogMessage } from '../types/log'
+import { ThirdPartyEmote } from '../types/ThirdPartyEmote'
+import runes from 'runes'
+import { Link } from '@mui/material'
+import Tooltip, { TooltipProps, tooltipClasses } from '@mui/material/Tooltip'
+import { LinkPreview } from './LinkPreview'
 
 const MessageContainer = styled.div`
   a {
@@ -20,46 +21,25 @@ const MessageContainer = styled.div`
       color: var(--theme2-bright);
     }
   }
-`;
+`
 
 // const HoverEmote = ()
 
-const Emote = ({
-  emote,
-  type,
-}:
-  | { emote: IEmote; type: "twitch" }
-  | { emote: ThirdPartyEmote; type: "thirdparty" }) => {
-  const [hovering, setHover] = useState(false);
-  if (type === "thirdparty")
+const Emote = ({ emote, type }: { emote: IEmote; type: 'twitch' } | { emote: ThirdPartyEmote; type: 'thirdparty' }) => {
+  const [hovering, setHover] = useState(false)
+  if (type === 'thirdparty')
     return (
-      <div
-        style={{ maxHeight: 18, width: "auto", display: "inline-block" }}
-        onMouseEnter={() => setHover(true)}
-        title={emote.code}
-      >
-        <BaseEmote
-          className="emote"
-          alt={emote.code}
-          src={hovering ? emote.urls.big : emote.urls.small}
-        />
+      <div style={{ maxHeight: 18, width: 'auto', display: 'inline-block' }} onMouseEnter={() => setHover(true)} title={emote.code}>
+        <BaseEmote className="emote" alt={emote.code} src={hovering ? emote.urls.big : emote.urls.small} />
       </div>
-    );
+    )
   else
     return (
-      <div
-        style={{ maxHeight: 18, width: "auto", display: "inline-block" }}
-        onMouseEnter={() => setHover(true)}
-        title={emote.code}
-      >
-        <BaseEmote
-          className="emote"
-          alt={emote.code}
-          src={`https://static-cdn.jtvnw.net/emoticons/v2/${emote.id}/default/dark/${hovering ? "3.0" : "1.0"}`}
-        />
+      <div style={{ maxHeight: 18, width: 'auto', display: 'inline-block' }} onMouseEnter={() => setHover(true)} title={emote.code}>
+        <BaseEmote className="emote" alt={emote.code} src={`https://static-cdn.jtvnw.net/emoticons/v2/${emote.id}/default/dark/${hovering ? '3.0' : '1.0'}`} />
       </div>
-    );
-};
+    )
+}
 
 const BaseEmote = styled.img`
   max-height: 18px;
@@ -77,73 +57,67 @@ const BaseEmote = styled.img`
   &:active {
     transform: scale(1.5);
   }
-`;
+`
 
-export function Message({
-  message,
-  thirdPartyEmotes,
-}: {
-  message: LogMessage;
-  thirdPartyEmotes: Array<ThirdPartyEmote>;
-}): JSX.Element {
-  const { state } = useContext(store);
-  const renderMessage: React.ReactNode[] = [];
+export function Message({ message, thirdPartyEmotes }: { message: LogMessage; thirdPartyEmotes: Array<ThirdPartyEmote> }): JSX.Element {
+  const { state } = useContext(store)
+  const renderMessage: React.ReactNode[] = []
 
-  let replaced;
-  let buffer = "";
+  let replaced
+  let buffer = ''
 
-  let messageText = message.text;
-  let renderMessagePrefix = "";
-  if (message.tags["system-msg"]) {
-    messageText = messageText.replace(message.tags["system-msg"] + " ", "");
+  let messageText = message.text
+  let renderMessagePrefix = ''
+  if (message.tags['system-msg']) {
+    messageText = messageText.replace(message.tags['system-msg'], '')
 
-    renderMessagePrefix = `${message.tags["system-msg"]} `;
+    renderMessagePrefix = `${message.tags['system-msg']} `
   }
 
-  const messageTextEmoji = runes(messageText);
+  const messageTextEmoji = runes(messageText)
 
   for (let x = 0; x <= messageTextEmoji.length; x++) {
-    const c = messageTextEmoji[x];
+    const c = messageTextEmoji[x]
 
-    replaced = false;
+    replaced = false
 
     if (state.settings.showEmotes.value) {
       for (const emote of message.emotes) {
         if (emote.startIndex === x) {
-          replaced = true;
-          renderMessage.push(<Emote type="twitch" key={x} emote={emote} />);
-          x += emote.endIndex - emote.startIndex - 1;
-          break;
+          replaced = true
+          renderMessage.push(<Emote type="twitch" key={x} emote={emote} />)
+          x += emote.endIndex - emote.startIndex - 1
+          break
         }
       }
     }
 
     if (!replaced) {
-      if (c !== " " && x !== messageTextEmoji.length) {
-        buffer += c;
-        continue;
+      if (c !== ' ' && x !== messageTextEmoji.length) {
+        buffer += c
+        continue
       }
-      let emoteFound = false;
+      let emoteFound = false
 
       for (const emote of thirdPartyEmotes) {
         if (buffer.trim() === emote.code) {
-          renderMessage.push(<Emote type="thirdparty" key={x} emote={emote} />);
-          emoteFound = true;
-          buffer = "";
+          renderMessage.push(<Emote type="thirdparty" key={x} emote={emote} />)
+          emoteFound = true
+          buffer = ''
 
-          break;
+          break
         }
       }
 
       if (!emoteFound) {
-        renderMessage.push(buffer);
-        buffer = "";
+        renderMessage.push(buffer)
+        buffer = ''
       }
 
       // if (c === ' ' && !state.settings.twitchChatMode.value) {
       //   renderMessage.push(<React.Fragment key={`${x}-newline`}>&nbsp;</React.Fragment>)
       // } else {
-      renderMessage.push(c);
+      renderMessage.push(c)
       // }
     }
   }
@@ -153,17 +127,30 @@ export function Message({
       <Linkify
         options={{
           render: ({ attributes, content }) => (
-            <Tooltip title={<LinkPreview href={attributes.href} />}>
+            <CustomTooltip
+              followCursor
+              placement="right-start"
+              title={<LinkPreview href={attributes.href} />}
+              style={{
+                borderRadius: 0,
+                backgroundColor: '#00000066+',
+              }}>
               <Link target="__blank" {...attributes}>
                 {content}
               </Link>
-            </Tooltip>
+            </CustomTooltip>
           ),
-        }}
-      >
+        }}>
         {renderMessagePrefix}
         {renderMessage}
       </Linkify>
     </MessageContainer>
-  );
+  )
 }
+
+export const CustomTooltip = styled(({ className, ...props }: TooltipProps) => <Tooltip {...props} followCursor placement="right-start" classes={{ popper: className }} />)`
+  .${tooltipClasses.tooltip} {
+    background-color: #000000ac;
+    border-radius: 0;
+  }
+`
