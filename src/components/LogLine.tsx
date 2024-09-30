@@ -29,7 +29,7 @@ const LogLineContainer = styled.li`
 	}
 
 	.user {
-		margin-left: 5px;
+		margin-left: 1px;
 		user-select: none;
 		/* font-weight: bold; */
 		line-height: 1.1rem;
@@ -43,9 +43,24 @@ const LogLineContainer = styled.li`
 
 export function LogLine({ message }: { message: LogMessage }) {
 	const { state } = useContext(store);
-	const isSysMsg = !!message.tags['system-msg'] || message.type == 4;
+	const colorValue = (() => {
+		if (!!message.tags['system-msg'] || message.type === 4) {
+			return '#562b70a3';
+		}
+		if (message.type === 2) {
+			return '#2b2b30';
+		}
+		if (!!message.tags['first-msg']) {
+			return '#487f3f3c';
+		}
+		if (!!message.tags['custom-reward-id']) {
+			return '#1c7e8d3c';
+		}
+
+		return null;
+	})();
 	if (state.settings.showEmotes.value) {
-		return <LogLineWithEmotes message={message} sysMsg={isSysMsg} />;
+		return <LogLineWithEmotes message={message} colorMsg={colorValue} />;
 	}
 	const parsed = parseTwitchMessage(message.raw);
 	const timestamp = dayjs(message.timestamp).format('YYYY-MM-DD HH:mm:ss');
@@ -53,12 +68,11 @@ export function LogLine({ message }: { message: LogMessage }) {
 		<LogLineContainer
 			className="logLine"
 			style={
-				isSysMsg
+				colorValue
 					? {
-							backgroundColor: '#562b70a3',
+							backgroundColor: colorValue,
 							paddingBlock: 1,
 							paddingRight: 8,
-							width: 'fit-content',
 						}
 					: {}
 			}>
@@ -76,7 +90,13 @@ export function LogLine({ message }: { message: LogMessage }) {
 	);
 }
 
-export function LogLineWithEmotes({ message, sysMsg }: { message: LogMessage; sysMsg?: boolean }) {
+export function LogLineWithEmotes({
+	message,
+	colorMsg,
+}: {
+	message: LogMessage;
+	colorMsg?: string;
+}) {
 	// console.log(message.tags)
 	const parsed = parseTwitchMessage(message.raw) as ChatMessage;
 	const thirdPartyEmotes = useThirdPartyEmotes(
@@ -88,12 +108,11 @@ export function LogLineWithEmotes({ message, sysMsg }: { message: LogMessage; sy
 		<LogLineContainer
 			className="logLine"
 			style={
-				sysMsg
+				colorMsg
 					? {
-							backgroundColor: '#562b70a3',
+							backgroundColor: colorMsg,
 							paddingBlock: 1,
 							paddingRight: 8,
-							width: 'fit-content',
 						}
 					: {}
 			}>

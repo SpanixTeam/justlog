@@ -55,11 +55,16 @@ export function useFfzChannelBadges(channelId: string): {
 			code: 'moderator/1',
 			title: 'Moderator',
 			urls: {
-				big: data.room.mod_urls['4'],
+				big: data.room.mod_urls[
+					Object.keys(data.room.mod_urls)
+						.map(Number)
+						.sort((a, b) => a - b)
+						.pop()
+				],
 				medium: data.room.mod_urls['2'],
 				small: data.room.mod_urls['1'],
 			},
-			action: null,
+			action: 'https://help.twitch.tv/s/article/twitch-chat-badges-guide',
 		};
 	}
 	if (data.room.vip_badge) {
@@ -67,7 +72,12 @@ export function useFfzChannelBadges(channelId: string): {
 			code: 'vip/1',
 			title: 'VIP',
 			urls: {
-				big: data.room.vip_badge['4'],
+				big: data.room.vip_badge[
+					Object.keys(data.room.vip_badge)
+						.map(Number)
+						.sort((a, b) => a - b)
+						.pop()
+				],
 				medium: data.room.vip_badge['2'],
 				small: data.room.vip_badge['1'],
 			},
