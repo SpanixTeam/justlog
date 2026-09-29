@@ -6,6 +6,7 @@ import styled from 'styled-components';
 import { useChannels } from '../hooks/useChannels';
 import { store } from '../store';
 import { Docs } from './Docs';
+import { Optout } from './Optout';
 import { Settings } from './Settings';
 
 declare global {
@@ -103,6 +104,7 @@ export function Filters() {
 				</Button>
 				<Settings />
 				<Docs />
+				<Optout />
 			</FiltersContainer>
 		</FiltersWrapper>
 	);
