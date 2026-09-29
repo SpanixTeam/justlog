@@ -77,18 +77,16 @@ export function OptoutPanel() {
 	return (
 		<OptoutPanelWrapper>
 			<p>
-				You can opt out from being logged. This will also disable access to your previously
-				logged data.
+				Puedes desactivar el registro de tus mensajes. Esto también desactivará el 
+				acceso a los datos registrados anteriormente.
 				<br />
-				This applies to all chats of that rustlog instance.
+				Esto se aplica a todos los chats de esta instancia de Rustlog.
 				<br />
-				Opting out is permanent, there is no reverse action. So think twice if you want to
-				opt out.
+				Darse de baja es definitivo, no se puede revertir. Así que piénsatelo bien 
+				antes de darte de baja.
 			</p>
 			<p>
-				Note that there might not be a confirmation message.
-				<br />
-				You will receive a confirmation message from the bot "@username, opted you out".
+				Ten en cuenta que es posible que no aparezca ningún mensaje de confirmación.
 			</p>
 			<br />
 			<div>
@@ -97,10 +95,10 @@ export function OptoutPanel() {
 			<div className="generator">
 				<input readOnly type="text" value={code} />
 				<Button variant="contained" onClick={generateCode} color="primary" size="large">
-					Generate Code
+					Generar Código
 				</Button>
 			</div>
-			{code && <p className="small">This code is valid for 60 seconds</p>}
+			{code && <p className="small">Este código es válido durante 60 segundos.</p>}
 		</OptoutPanelWrapper>
 	);
 }
